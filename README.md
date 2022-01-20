@@ -24,7 +24,6 @@ jobs:
   
   inform-slack-success:
     needs: [<ID OF DEPLOYMENT JOB>]
-    if: ${{ always() }}
     uses: spring-media/la-shared-github-workflows/workflows/reusable-workflow__slack-notifications.yaml@main
     with:
       workflow: ${{ github.workflow }}
