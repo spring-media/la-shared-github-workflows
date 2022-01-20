@@ -14,7 +14,7 @@ jobs:
   inform-slack-success:
     needs: [slack-demo]
     if: ${{ success() }}
-    uses: spring-media/la-shared-github-workflows/workflows/reusable-workflow__slack-notifications.yaml@134fa02858f87150acc090340a02b66d6fac7f3f
+    uses: spring-media/la-shared-github-workflows/.github/workflows/reusable-workflow__slack-notifications.yaml@cc696a7cb3be2005b85495d0a49a276dd94babdc
     with:
       workflow: ${{ github.workflow }}
       repository: ${{ github.repository }}
@@ -27,7 +27,7 @@ jobs:
   inform-slack-failure:
     needs: [slack-demo]
     if: ${{ failure() }}
-    uses: spring-media/la-shared-github-workflows/workflows/reusable-workflow__slack-notifications.yaml@134fa02858f87150acc090340a02b66d6fac7f3f
+    uses: spring-media/la-shared-github-workflows/.github/workflows/reusable-workflow__slack-notifications.yaml@cc696a7cb3be2005b85495d0a49a276dd94babdc
     with:
       workflow: ${{ github.workflow }}
       repository: ${{ github.repository }}
