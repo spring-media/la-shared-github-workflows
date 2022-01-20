@@ -9,7 +9,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: echoes sth
-        run: echo "Hello World"
+        run: |
+          echo ${{ github.action_status }}
+          echo ${{ job.status }}
 
   inform-slack:
     needs: [slack-demo]
