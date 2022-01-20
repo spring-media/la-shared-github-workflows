@@ -7,19 +7,24 @@ on:
 jobs:
   slack-demo:
     runs-on: ubuntu-latest
+    outputs:
+      status: ${{ job.status }}
     steps:
       - name: echoes sth
         run: |
           echo "hello world"
+          echo ${{ github.actions_status }}
+          echo ${{ job.status }}
 
   inform-slack:
     needs: [slack-demo]
+    if: ${{ always() }}
     uses: spring-media/la-shared-github-workflows/.github/workflows/reusable-workflow__slack-notifications.yaml@cc696a7cb3be2005b85495d0a49a276dd94babdc
     with:
       workflow: ${{ github.workflow }}
       repository: ${{ github.repository }}
       repositoryUrl: ${{ github.event.repository.url }}
       refName: ${{ github.ref_name }}
-      success: ${{ github.actions_status == 'success' }}
+      success: ${{ needs.slack-demo.result == 'success' }}
     secrets:
       SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
