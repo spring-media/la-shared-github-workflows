@@ -1,0 +1,118 @@
+name: Send slack message
+
+on:
+  workflow_call:
+    inputs:
+      workflow:
+        required: true
+        type: string
+      repository:
+        required: true
+        type: string
+      repositoryUrl:
+        required: true
+        type: string
+      refName:
+        required: true
+        type: string
+      success:
+        required: true
+        type: boolean
+    secrets:
+      SLACK_BOT_TOKEN:
+        required: true
+
+jobs:
+  reusable_workflow_job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: echo input
+        run: |
+          echo ${{ inputs.status }}
+          echo ${{ inputs.repository }}
+          echo ${{ inputs.repositoryUrl }}
+          echo ${{ inputs.refName }}
+      - name: Send failure message to Slack
+        if: inputs.success == false
+        id: slack-failure
+        uses: slackapi/slack-github-action@v1.17.0
+        with:
+          channel-id: 't_loyalty_notifications'
+          payload: |
+            {
+              "blocks": [
+                {
+                  "type": "header",
+                  "text": {
+                    "type": "plain_text",
+                    "text": "${{ inputs.repository }} Deployment Failed :x:",
+                    "emoji": true
+                  }
+                },
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Ref:*\n ${{ inputs.refName }}"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Workflow:*\n ${{ inputs.workflow }}"
+                    }
+                  ]
+                },
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Repository:*\n${{ inputs.repositoryUrl }}"
+                    }
+                  ]
+                }
+              ]
+            }
+      - name: Send success message to Slack
+        if: inputs.success == true
+        id: slack-success
+        uses: slackapi/slack-github-action@v1.17.0
+        with:
+          channel-id: 't_loyalty_notifications'
+          payload: |
+            {
+              "blocks": [
+                {
+                  "type": "header",
+                  "text": {
+                    "type": "plain_text",
+                    "text": "${{ inputs.repository }} Deployment Successful :white_check_mark:",
+                    "emoji": true
+                  }
+                },
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Ref:*\n ${{ inputs.refName }}"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Workflow:*\n ${{ inputs.workflow }}"
+                    }
+                  ]
+                },
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Repository:*\n${{ inputs.repositoryUrl }}"
+                    }
+                  ]
+                }
+              ]
+            }
+    env:
+      SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
