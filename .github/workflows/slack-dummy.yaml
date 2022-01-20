@@ -7,6 +7,8 @@ on:
 jobs:
   slack-demo:
     runs-on: ubuntu-latest
+    outputs:
+      success: ${{ success() }}
     steps:
       - name: echoes sth
         run: echo "Hello World"
@@ -19,6 +21,6 @@ jobs:
       repository: ${{ github.repository }}
       repositoryUrl: ${{ github.event.repository.url }}
       refName: ${{ github.ref_name }}
-      success: ${{ success() }}
+      success: ${{ needs.slack-demo.outputs.success }}
     secrets:
       SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
