@@ -19,6 +19,6 @@ jobs:
       repository: ${{ github.repository }}
       repositoryUrl: ${{ github.event.repository.url }}
       refName: ${{ github.ref_name }}
-      success: ${{ success }}
+      success: ${{ success() }}
     secrets:
       SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
