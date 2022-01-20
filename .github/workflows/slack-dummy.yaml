@@ -1,4 +1,4 @@
--name: slack demo
+name: slack demo
 
 on:
   pull_request:
