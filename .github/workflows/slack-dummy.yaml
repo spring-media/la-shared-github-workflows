@@ -10,8 +10,7 @@ jobs:
     steps:
       - name: echoes sth
         run: |
-          echo ${{ github.action_status }}
-          echo ${{ job.status }}
+          echo "hello world"
 
   inform-slack:
     needs: [slack-demo]
@@ -21,6 +20,6 @@ jobs:
       repository: ${{ github.repository }}
       repositoryUrl: ${{ github.event.repository.url }}
       refName: ${{ github.ref_name }}
-      success: ${{ github.action_status == 'success' }}
+      success: ${{ job.status == 'success' }}
     secrets:
       SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
