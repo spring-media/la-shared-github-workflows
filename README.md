@@ -5,10 +5,12 @@ This repo hosts shared github workflows used by other repositories.
 #### Usage
 The Slack deployment notification consist of two extra jobs that need to be added to your deployment pipeline.
 
-Add the two jobs `inform-slack-success` and `inform-slack-failure` to the end(!) of your github actions file.
-Then you will and exchange the ID in each job's `needs: []` line.
-The name of the deployment job in this example is `deploy`, so you will change the two lines with
-`needs: [<ID OF DEPLOYMENT JOB>]` to `needs: [deploy]`.
+Add the job `inform-slack` to the end(!) of your github actions file.
+Then you will and exchange the ID in `needs: [<ADD JOB ID>]`  and in 
+`success: ${{ needs.<ADD JOB ID>.result == 'success' }}`.
+
+The name of the deployment job in this example is `deploy`, so you will change the two lines with to `needs: [deploy]` 
+and `success: ${{ needs.deploy.result == 'success' }}` respectively.
 
 ```yaml
 name: deploy
@@ -21,34 +23,19 @@ on:
 jobs:
   deploy:
     ... A lot of stuff usually happens here ...
-  
-  inform-slack-success:
-    needs: [<ID OF DEPLOYMENT JOB>]
+
+  inform-slack:
+    needs: [<ADD JOB ID>]
     if: ${{ always() }}
-    uses: spring-media/la-shared-github-workflows/workflows/reusable-workflow__slack-notifications.yaml@main
+    uses: spring-media/la-shared-github-workflows/.github/workflows/reusable-workflow__slack-notifications.yaml@main
     with:
       workflow: ${{ github.workflow }}
       repository: ${{ github.repository }}
       repositoryUrl: ${{ github.event.repository.url }}
       refName: ${{ github.ref_name }}
-      status: 'success'
+      success: ${{ needs.<ADD JOB ID>.result == 'success' }}
     secrets:
       SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-
-  inform-slack-failure:
-    needs: [<ID OF DEPLOYMENT JOB>]
-    if: ${{ failure() }}
-    uses: spring-media/la-shared-github-workflows/workflows/reusable-workflow__slack-notifications.yaml@main
-    with:
-      workflow: ${{ github.workflow }}
-      repository: ${{ github.repository }}
-      repositoryUrl: ${{ github.event.repository.url }}
-      refName: ${{ github.ref_name }}
-      status: 'failure'
-    secrets:
-      SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-    
-
 
 ```
 
