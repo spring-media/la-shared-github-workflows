@@ -1,0 +1,38 @@
+-name: slack demo
+
+on:
+  pull_request:
+    types: [ opened, reopened, synchronize, ready_for_review ]
+
+jobs:
+  slack-demo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: echoes sth
+        run: echo "Hello World"
+
+  inform-slack-success:
+    needs: [slack-demo]
+    if: ${{ success() }}
+    uses: spring-media/la-hollywood/.github/workflows/reusable-workflow__slack-notifications.yaml@134fa02858f87150acc090340a02b66d6fac7f3f
+    with:
+      workflow: ${{ github.workflow }}
+      repository: ${{ github.repository }}
+      repositoryUrl: ${{ github.event.repository.url }}
+      refName: ${{ github.ref_name }}
+      status: 'success'
+    secrets:
+      SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+
+  inform-slack-failure:
+    needs: [slack-demo]
+    if: ${{ failure() }}
+    uses: spring-media/la-hollywood/.github/workflows/reusable-workflow__slack-notifications.yaml@134fa02858f87150acc090340a02b66d6fac7f3f
+    with:
+      workflow: ${{ github.workflow }}
+      repository: ${{ github.repository }}
+      repositoryUrl: ${{ github.event.repository.url }}
+      refName: ${{ github.ref_name }}
+      status: 'failure'
+    secrets:
+      SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
