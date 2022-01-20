@@ -15,9 +15,9 @@ on:
       refName:
         required: true
         type: string
-      status:
+      success:
         required: true
-        type: string
+        type: boolean
     secrets:
       SLACK_BOT_TOKEN:
         required: true
@@ -33,7 +33,7 @@ jobs:
           echo ${{ inputs.repositoryUrl }}
           echo ${{ inputs.refName }}
       - name: Send failure message to Slack
-        if: inputs.status == 'failure'
+        if: inputs.success == false
         id: slack-failure
         uses: slackapi/slack-github-action@v1.17.0
         with:
@@ -74,7 +74,7 @@ jobs:
               ]
             }
       - name: Send success message to Slack
-        if: inputs.status == 'success'
+        if: inputs.success == true
         id: slack-success
         uses: slackapi/slack-github-action@v1.17.0
         with:
