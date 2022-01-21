@@ -17,7 +17,7 @@ Then you will and exchange the ID in `needs: [<ADD JOB ID>]` and in
 The name of the deployment job in this example is `deploy`, so you will change the two lines with to `needs: [deploy]`
 and `success: ${{ needs.deploy.result == 'success' }}` respectively.
 
-The job handles every case, by: `if: ${{ always() }}` it will always run, no matter the state of the runs before, the
+The job handles every case, by: `if: ${{ always() }}` it will always run, no matter the state of the jobs before, the
 line `needs: [<ADD JOB ID>]` makes it wait until the deployment job has finished (in any way) and
 `success: ${{ needs.<ADD JOB ID>.result == 'success' }}` hands in a boolean, `true` in case the run was successful,
 `false` in case it was a failure, skipped or cancelled.
