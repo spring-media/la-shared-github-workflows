@@ -1,15 +1,20 @@
 # la-shared-github-workflows
+
 This repo hosts shared github workflows used by other repositories.
 
+Please refer to githubs documentation on how to use and implement shared workflows: https://docs.github.com/en/actions/using-workflows/reusing-workflows
+
 ### Deployment Slack Notification Workflow
+
 #### Usage
+
 The Slack deployment notification consist of two extra jobs that need to be added to your deployment pipeline.
 
 Add the job `inform-slack` to the end(!) of your github actions file.
-Then you will and exchange the ID in `needs: [<ADD JOB ID>]`  and in 
+Then you will and exchange the ID in `needs: [<ADD JOB ID>]` and in
 `success: ${{ needs.<ADD JOB ID>.result == 'success' }}`.
 
-The name of the deployment job in this example is `deploy`, so you will change the two lines with to `needs: [deploy]` 
+The name of the deployment job in this example is `deploy`, so you will change the two lines with to `needs: [deploy]`
 and `success: ${{ needs.deploy.result == 'success' }}` respectively.
 
 ```yaml
@@ -21,8 +26,7 @@ on:
       - master
 
 jobs:
-  deploy:
-    ... A lot of stuff usually happens here ...
+  deploy: ... A lot of stuff usually happens here ...
 
   inform-slack:
     needs: [<ADD JOB ID>]
@@ -36,6 +40,4 @@ jobs:
       success: ${{ needs.<ADD JOB ID>.result == 'success' }}
     secrets:
       SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-
 ```
-
