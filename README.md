@@ -28,7 +28,7 @@ on:
 jobs:
   deploy: ... A lot of stuff usually happens here ...
 
-  inform-slack:
+  slack-notify-after-production-deploy:
     needs: [<ADD JOB ID>]
     if: ${{ always() }}
     uses: spring-media/la-shared-github-workflows/.github/workflows/reusable-workflow__slack-notifications.yaml@main
