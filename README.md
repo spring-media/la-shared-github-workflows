@@ -4,9 +4,9 @@ This repo hosts shared github workflows used by other repositories.
 
 Please refer to githubs documentation on how to use and implement shared workflows: https://docs.github.com/en/actions/using-workflows/reusing-workflows
 
-### Deployment Slack Notification Workflow
+### After Deployment Slack Notification Workflow
 
-The Slack deployment notification notifies our slack channel `#t_loyalty_notifications` whether a deployment was successful
+The After Deployment Slack Notification notifies our slack channel `#t_loyalty_notifications` whether a deployment was successful
 or not.
 
 #### Usage
