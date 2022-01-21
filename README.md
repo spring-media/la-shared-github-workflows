@@ -6,9 +6,11 @@ Please refer to githubs documentation on how to use and implement shared workflo
 
 ### Deployment Slack Notification Workflow
 
-#### Usage
+The Slack deployment notification notifies our slack channel `#t_loyalty_notifications` whether a deployment was successful
+or not.
 
-The Slack deployment notification consist of an extra job that needs to be added to your deployment pipeline.
+#### Usage
+The Slack deployment notification consists of an extra job that needs to be added to your deployment pipeline.
 
 Add the job `inform-slack` to the end(!) of your github actions file.
 Then you will and exchange the ID in `needs: [<ADD JOB ID>]` and in
