@@ -8,7 +8,7 @@ Please refer to githubs documentation on how to use and implement shared workflo
 
 #### Usage
 
-The Slack deployment notification consist of two extra jobs that need to be added to your deployment pipeline.
+The Slack deployment notification consist of an extra job that needs to be added to your deployment pipeline.
 
 Add the job `inform-slack` to the end(!) of your github actions file.
 Then you will and exchange the ID in `needs: [<ADD JOB ID>]` and in
@@ -16,6 +16,12 @@ Then you will and exchange the ID in `needs: [<ADD JOB ID>]` and in
 
 The name of the deployment job in this example is `deploy`, so you will change the two lines with to `needs: [deploy]`
 and `success: ${{ needs.deploy.result == 'success' }}` respectively.
+
+The job handles every case, by: `if: ${{ always() }}` it will always run, no matter the state of the runs before, the
+line `needs: [<ADD JOB ID>]` makes it wait until the deployment job has finished (in any way) and
+`success: ${{ needs.<ADD JOB ID>.result == 'success' }}` hands in a boolean, `true` in case the run was successful,
+`false` in case it was a failure, skipped or cancelled.
+
 
 ```yaml
 name: deploy
@@ -31,7 +37,7 @@ jobs:
   inform-slack:
     needs: [<ADD JOB ID>]
     if: ${{ always() }}
-    uses: spring-media/la-shared-github-workflows/.github/workflows/reusable-workflow__slack-notifications.yaml@main
+    uses: spring-media/la-shared-github-workflows/.github/workflows/reusable-workflow__slack-notify-after-production-deploy.yaml@main
     with:
       workflow: ${{ github.workflow }}
       repository: ${{ github.repository }}
