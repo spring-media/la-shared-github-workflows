@@ -1,6 +1,8 @@
 # la-shared-github-workflows
 This repo hosts shared github workflows used by other repositories.
 
+Please refer to githubs documentation on how to use and implement shared workflows: https://docs.github.com/en/actions/using-workflows/reusing-workflows
+
 ### Deployment Slack Notification Workflow
 #### Usage
 The Slack deployment notification consist of two extra jobs that need to be added to your deployment pipeline.
