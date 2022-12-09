@@ -1,0 +1,90 @@
+name: Deploy to AWS
+
+on:
+  workflow_call:
+    inputs:
+      cloudfront_distribution_id:
+        required: true
+        type: string
+      cloudfront_paths:
+        required: true
+        type: string
+      build_script_name:
+        required: true
+        type: string
+      aws_bucket:
+        required: true
+        type: string
+      build_directory:
+        required: true
+        type: string
+
+      branch_deploy:
+        required: false
+        type: boolean
+        default: false
+      branch_name:
+        required: false
+        type: string
+      branch_deploy_base_url:
+        required: false
+        type: string
+
+    secrets:
+      AWS_ACCESS_KEY_ID:
+        required: true
+      AWS_ACCESS_KEY_SECRET:
+        required: true
+      LA_TECH_USER_AUTH_TOKEN:
+        required: true
+      GITHUB_TOKEN:
+        required: true
+
+jobs:
+  deploy:
+    name: Deploy to AWS
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Install node
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: ".node-version"
+          always-auth: true
+          cache: npm
+          registry-url: "https://registry.npmjs.org"
+      - name: Add github npm registry with scope @spring-media to .npmrc
+        run: |
+          echo "//npm.pkg.github.com/:_authToken=${{secrets.LA_TECH_USER_AUTH_TOKEN}}" >> .npmrc
+          echo "@spring-media:registry=https://npm.pkg.github.com" >> .npmrc
+      - name: Install dependencies
+        run: |
+          npm install --ignore-scripts
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
+      - name: Export branch name
+        if: inputs.branch_deploy == true
+        run: export BRANCH_NAME=${{ inputs.branch_name }}
+      - name: Build project
+        run: |
+          npm run clean --if-present
+          npm run ${{ inputs.build_script_name }}
+      - name: Configure AWS creds
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_ACCESS_KEY_SECRET }}
+          aws-region: eu-central-1
+      - name: Deploy files from ${{ inputs.build_directory }} to AWS S3 bucket ${{ inputs.aws_bucket }}
+        run: aws s3 cp --recursive ${{ inputs.build_directory }} ${{ inputs.aws_bucket }}
+      - name: Bust cloudfront cache
+        run: aws cloudfront create-invalidation --distribution-id=${{ inputs.cloudfront_distribution_id }} --paths ${{ inputs.cloudfront_paths }}
+      - name: Comment branch link on PR
+        if: inputs.branch_deploy == true
+        uses: mshick/add-pr-comment@v1
+        with:
+          message: "Your branch has been deployed to: ${{ inputs.branch_deploy_base_url }}/${{ inputs.branch_name }}/"
+          allow-repeats: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
