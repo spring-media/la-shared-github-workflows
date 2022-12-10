@@ -4,12 +4,17 @@ This repo hosts shared github workflows used by other repositories.
 
 Please refer to githubs documentation on how to use and implement shared workflows: https://docs.github.com/en/actions/using-workflows/reusing-workflows
 
-## Workflows
+### Workflows
 
-- [slack-notify-after-production-deploy](#slack-notify-after-production-deploy)
+- [js\_\_deploy-to-s3](#js__deploy-to-s3)
 - [js\_\_format-lint-test](#js__format-lint-test)
+- [slack-notify-after-production-deploy](#slack-notify-after-production-deploy)
 
-### js\_\_format-lint-test
+## js\_\_deploy-to-s3
+
+[js\_\_deploy-to-s3](.github/workflows/reusable-workflow__js__deploy-to-s3.yaml)
+
+## js\_\_format-lint-test
 
 The [js\_\_format-lint-test workflow](./.github/workflows/reusable-workflow__js__format-lint-test.yml) will install dependencies and then run these npm commands on the project:
 
@@ -27,7 +32,7 @@ It also requires to secrets to be passed in:
 
 The node version has to be set via a `.node-version` file.
 
-#### Usage
+### Usage
 
 ```yaml
 jobs:
@@ -39,11 +44,11 @@ jobs:
       LA_TECH_USER_AUTH_TOKEN: ${{ secrets.LA_TECH_USER_AUTH_TOKEN }}
 ```
 
-### slack-notify-after-production-deploy
+## slack-notify-after-production-deploy
 
 The [slack-notify-after-production-deploy workflow](./.github/workflows/reusable-workflow__slack-notify-after-production-deploy.yaml) notifies our slack channel `#t_loyalty_notifications` whether a deployment was successful or not.
 
-#### Usage
+### Usage
 
 The Slack deployment notification consists of an extra job that needs to be added to your deployment pipeline.
 
