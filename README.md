@@ -133,3 +133,19 @@ jobs:
     secrets:
       SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
 ```
+
+## Releasing
+
+Versioned releases for workflows are done via tags. The whole process is described here: https://github.com/actions/toolkit/blob/main/docs/action-versioning.md
+
+Since all the shared actions live in one repository, we only have a unified tag for all workflows.
+The current version is `v1`. Should you make any major breaking changes please increment the major version number.
+For patch and minor upgrades please consider creating a new semver release as well as updating the
+major version tag so that all actions. This is best practice and described in the document linked above.
+
+```
+git tag -fa v1 -m "Update v1 tag"
+git push origin v1 --force
+```
+
+Please note that this is currently a manual process. This might change in the future.
