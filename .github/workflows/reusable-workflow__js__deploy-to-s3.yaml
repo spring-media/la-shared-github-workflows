@@ -37,8 +37,6 @@ on:
         required: true
       LA_TECH_USER_AUTH_TOKEN:
         required: true
-      GITHUB_TOKEN:
-        required: true
 
 jobs:
   deploy:
@@ -78,7 +76,7 @@ jobs:
           aws-region: eu-central-1
       - name: Deploy files from ${{ inputs.build_directory }} to AWS S3 bucket ${{ inputs.aws_bucket }}
         run: aws s3 cp --recursive ${{ inputs.build_directory }} ${{ inputs.aws_bucket }}
-      - name: Bust cloudfront cache
+      - name: Invalidate cloudfront cache
         run: aws cloudfront create-invalidation --distribution-id=${{ inputs.cloudfront_distribution_id }} --paths ${{ inputs.cloudfront_paths }}
       - name: Comment branch link on PR
         if: inputs.branch_deploy == true
