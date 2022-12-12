@@ -62,11 +62,17 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
       - name: Build project for branch ${{ inputs.branch_name }}
+        if: inputs.branch_deploy == true
         run: |
           npm run clean --if-present
           npm run ${{ inputs.build_script_name }}
         env:
           BRANCH_NAME: ${{ inputs.branch_name }}
+      - name: Build project
+        if: inputs.branch_deploy == false
+        run: |
+          npm run clean --if-present
+          npm run ${{ inputs.build_script_name }}
       - name: Configure AWS creds
         uses: aws-actions/configure-aws-credentials@v1
         with:
