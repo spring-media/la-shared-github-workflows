@@ -37,6 +37,8 @@ on:
         required: true
       LA_TECH_USER_AUTH_TOKEN:
         required: true
+      NPM_AUTH_TOKEN:
+        required: true
 
 jobs:
   deploy:

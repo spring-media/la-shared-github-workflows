@@ -34,6 +34,7 @@ These are the required secrets:
 - `AWS_ACCESS_KEY_ID`
 - `AWS_ACCESS_KEY_SECRET`
 - `LA_TECH_USER_AUTH_TOKEN`
+- `NPM_AUTH_TOKEN`
 
 ### Usage
 
