@@ -12,7 +12,51 @@ Please refer to githubs documentation on how to use and implement shared workflo
 
 ## js\_\_deploy-to-s3
 
-[js\_\_deploy-to-s3](.github/workflows/reusable-workflow__js__deploy-to-s3.yaml)
+The [js\_\_deploy-to-s3 workflow](.github/workflows/reusable-workflow__js__deploy-to-s3.yaml) builds a js project and deploys the resulting files
+to a given S3 bucket. It can also be used for branch based deployments of frontend projects.
+
+Required variables to pass in
+
+- `cloudfront_distribution_id` (string) – the Cloudfront distribution id that needs to be invalidated to serve the latest content
+- `cloudfront_paths` (string) – the Cloudfront paths that should be invalidated
+- `build_script_name` (string) – the npm command to execute the build
+- `build_directory` (string) – the output directory the executed build saves its files to
+- `aws_bucket` (string) – the aws bucket to deploy to
+
+If using it for branch based deploy you also need to pass in:
+
+- `branch_deploy` (boolean) – Whether the deploy should be branch based (post a comment to the PR after the deploy and sets environment variables when building to set the paths properly in projects)
+- `branch_name` – the name of the current branch
+- `branch_deploy_base_url` – The base url for the deployed branches
+
+These are the required secrets:
+
+- `AWS_ACCESS_KEY_ID`
+- `AWS_ACCESS_KEY_SECRET`
+- `LA_TECH_USER_AUTH_TOKEN`
+
+### Usage
+
+```yaml
+jobs:
+  …
+  deploy-branch:
+    needs: format-lint-and-unit-tests
+    uses: spring-media/la-shared-github-workflows/.github/workflows/reusable-workflow__js__deploy-to-s3.yaml@v1
+    with:
+      cloudfront_distribution_id: E26N41SPUCWIRP
+      cloudfront_paths: /
+      build_script_name: build-staging
+      aws_bucket: s3://hua-mod-web.staging.la.welt.de/${{ github.head_ref || github.ref_name }}
+      build_directory: build
+      branch_deploy: true
+      branch_name: ${{ github.head_ref || github.ref_name }}
+      branch_deploy_base_url: https://hua-mod-web.staging.la.welt.de
+    secrets:
+      AWS_ACCESS_KEY_ID: ${{ secrets.access_key_id }}
+      AWS_ACCESS_KEY_SECRET: ${{ secrets.access_key_secret }}
+      LA_TECH_USER_AUTH_TOKEN: ${{ secrets.LA_TECH_USER_AUTH_TOKEN }}
+```
 
 ## js\_\_format-lint-test
 
