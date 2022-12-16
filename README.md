@@ -6,9 +6,32 @@ Please refer to githubs documentation on how to use and implement shared workflo
 
 ### Workflows
 
+- [aws-remove-bucket](#aws-remove-bucket)
 - [js\_\_deploy-to-s3](#js__deploy-to-s3)
 - [js\_\_format-lint-test](#js__format-lint-test)
 - [slack-notify-after-production-deploy](#slack-notify-after-production-deploy)
+
+## aws-remove-bucket
+
+[aws-remove-bucket workflow](.github/workflows/reusable-workflow__aws-remove-bucket.yaml) removes a given bucket from S3. We need this for cleanup of branch deploys to S3 buckets after they got merged.
+
+### Usage
+
+```yaml
+
+jobs:
+  …
+  cleanup-after-merge:
+    uses: spring-media/la-shared-github-workflows/.github/workflows/reusable-workflow__aws-remove-bucket.yaml@v1
+    with:
+      aws_bucket: s3://hua-mod-web.staging.la.welt.de/${{ github.head_ref || github.ref_name }}
+    secrets:
+      AWS_ACCESS_KEY_ID: ${{ secrets.access_key_id }}
+      AWS_ACCESS_KEY_SECRET: ${{ secrets.access_key_secret }}
+  …
+```
+
+###
 
 ## js\_\_deploy-to-s3
 
