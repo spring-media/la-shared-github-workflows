@@ -1,0 +1,26 @@
+name: AWS remove bucket
+
+on:
+  workflow_call:
+    inputs:
+      aws_bucket:
+        required: true
+        type: string
+    secrets:
+      AWS_ACCESS_KEY_ID:
+        required: true
+      AWS_ACCESS_KEY_SECRET:
+        required: true
+jobs:
+  RemoveS3Bucket:
+    name: Remove S3 bucket ${{ inputs.aws_bucket }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_ACCESS_KEY_SECRET }}
+          aws-region: eu-central-1
+      - name: Remove the bucket
+        run: aws s3 rm --recursive ${{ inputs.aws_bucket }}
