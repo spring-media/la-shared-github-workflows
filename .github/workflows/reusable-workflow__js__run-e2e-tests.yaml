@@ -1,0 +1,50 @@
+name: Run e2e tests
+
+on:
+  workflow_call:
+    with:
+      cypress_login_user:
+        required: false
+        type: string
+      cypress_login_password:
+        required: false
+        type: string
+    secrets:
+      NPM_AUTH_TOKEN:
+        required: true
+      LA_TECH_USER_AUTH_TOKEN:
+        required: true
+
+jobs:
+  run-e2e-tests:
+    name: Run e2e tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v3
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: ".node-version"
+          always-auth: true
+          cache: npm
+          registry-url: "https://registry.npmjs.org/"
+      - name: Install dependencies
+        run: npm install --ignore-scripts
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
+          LA_TECH_USER_AUTH_TOKEN: ${{ secrets.LA_TECH_USER_AUTH_TOKEN }}
+      - name: Add local.la.welt.de for localhost because CORS
+        run: echo "127.0.0.1 local.la.welt.de" | sudo tee -a /etc/hosts
+      - name: Run e2e tests
+        uses: cypress-io/github-action@v4
+        with:
+          browser: chrome
+          headless: true
+          command: npm run e2e
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
+          LA_TECH_USER_AUTH_TOKEN: ${{ secrets.LA_TECH_USER_AUTH_TOKEN }}
+          NODE_TLS_REJECT_UNAUTHORIZED: 0
+          CYPRESS_LOGINUSER: ${{ inputs.cypress_login_user }}
+          CYPRESS_LOGINPWD: ${{ inputs.cypress_login_password }}
