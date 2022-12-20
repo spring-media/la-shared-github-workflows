@@ -9,6 +9,7 @@ Please refer to githubs documentation on how to use and implement shared workflo
 - [aws-remove-bucket](#aws-remove-bucket)
 - [js\_\_deploy-to-s3](#js__deploy-to-s3)
 - [js\_\_format-lint-test](#js__format-lint-test)
+- [js\_\_run-e2e-tests](#js__run-e2e-tests)
 - [slack-notify-after-production-deploy](#slack-notify-after-production-deploy)
 
 ## aws-remove-bucket
@@ -35,7 +36,7 @@ jobs:
 
 ## js\_\_deploy-to-s3
 
-The [js\_\_deploy-to-s3 workflow](.github/workflows/reusable-workflow__js__deploy-to-s3.yaml) builds a js project and deploys the resulting files
+The [js\_\_deploy-to-s3 workflow](./.github/workflows/reusable-workflow__js__deploy-to-s3.yaml) builds a js project and deploys the resulting files
 to a given S3 bucket. It can also be used for branch based deployments of frontend projects.
 
 Required variables to pass in
@@ -112,6 +113,26 @@ jobs:
       LA_TECH_USER_AUTH_TOKEN: ${{ secrets.LA_TECH_USER_AUTH_TOKEN }}
 ```
 
+## js\_\_run-e2e-tests
+
+[js\_\_run-e2e-tests workflow](./.github/workflows/reusable-workflow__js__run-e2e-tests.yaml) will setup up a job that will run all the cypress tests configured in your project
+
+### Usage
+
+```yaml
+jobs:
+  …
+  run-e2e-tests:
+    uses: spring-media/la-shared-github-workflows/.github/workflows/reusable-workflow__js__run-e2e-tests.yaml@v1
+    with:
+      cypress_login_user: ${{ secrets.WELT_MODERATOR_USER_USERNAME }}
+      cypress_login_password: ${{ secrets.WELT_MODERATOR_USER_PASSWORD }}
+    secrets:
+      NPM_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
+      LA_TECH_USER_AUTH_TOKEN: ${{ secrets.LA_TECH_USER_AUTH_TOKEN }}
+  …
+```
+
 ## slack-notify-after-production-deploy
 
 The [slack-notify-after-production-deploy workflow](./.github/workflows/reusable-workflow__slack-notify-after-production-deploy.yaml) notifies our slack channel `#t_loyalty_notifications` whether a deployment was successful or not.
@@ -146,7 +167,7 @@ jobs:
   slack-notify-after-production-deploy:
     needs: [<ADD JOB ID>]
     if: ${{ always() }}
-    uses: spring-media/la-shared-github-workflows/.github/workflows/reusable-workflow__slack-notify-after-production-deploy.yaml@main
+    uses: spring-media/la-shared-github-workflows/.github/workflows/reusable-workflow__slack-notify-after-production-deploy.yaml@v1
     with:
       workflow: ${{ github.workflow }}
       repository: ${{ github.repository }}
