@@ -2,7 +2,7 @@ name: Run e2e tests
 
 on:
   workflow_call:
-    with:
+    inputs:
       cypress_login_user:
         required: false
         type: string
