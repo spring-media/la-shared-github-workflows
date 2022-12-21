@@ -124,10 +124,9 @@ jobs:
   …
   run-e2e-tests:
     uses: spring-media/la-shared-github-workflows/.github/workflows/reusable-workflow__js__run-e2e-tests.yaml@v1
-    with:
-      cypress_login_user: ${{ secrets.WELT_MODERATOR_USER_USERNAME }}
-      cypress_login_password: ${{ secrets.WELT_MODERATOR_USER_PASSWORD }}
     secrets:
+      CYPRESS_LOGINUSER: ${{ secrets.WELT_MODERATOR_USER_USERNAME }}
+      CYPRESS_LOGINPWD: ${{ secrets.WELT_MODERATOR_USER_PASSWORD }}
       NPM_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
       LA_TECH_USER_AUTH_TOKEN: ${{ secrets.LA_TECH_USER_AUTH_TOKEN }}
   …
