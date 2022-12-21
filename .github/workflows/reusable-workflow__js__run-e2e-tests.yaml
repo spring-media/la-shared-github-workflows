@@ -2,14 +2,13 @@ name: Run e2e tests
 
 on:
   workflow_call:
-    inputs:
-      cypress_login_user:
-        required: false
-        type: string
-      cypress_login_password:
-        required: false
-        type: string
     secrets:
+      CYPRESS_LOGINUSER:
+        required: false
+        description: Some applications need the user to be logged in. You can provide a username here that will be used for logging in to the application.
+      CYPRESS_LOGINPWD:
+        required: false
+        description: Some applications need the user to be logged in. You can provide the password here that will be used for logging in to the application.
       NPM_AUTH_TOKEN:
         required: true
       LA_TECH_USER_AUTH_TOKEN:
@@ -43,8 +42,8 @@ jobs:
           headless: true
           command: npm run e2e
         env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
           LA_TECH_USER_AUTH_TOKEN: ${{ secrets.LA_TECH_USER_AUTH_TOKEN }}
           NODE_TLS_REJECT_UNAUTHORIZED: 0
-          CYPRESS_LOGINUSER: ${{ inputs.cypress_login_user }}
-          CYPRESS_LOGINPWD: ${{ inputs.cypress_login_password }}
+          CYPRESS_LOGINUSER: ${{ secrets.CYPRESS_LOGINUSER }}
+          CYPRESS_LOGINPWD: ${{ secrets.CYPRESS_LOGINPWD }}
