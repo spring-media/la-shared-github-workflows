@@ -107,7 +107,7 @@ The node version has to be set via a `.node-version` file.
 jobs:
   …
   format-lint-and-unit-test:
-    uses: spring-media/la-shared-github-workflows/.github/workflows/reusable-workflow__js__format-lint-test.yml@main
+    uses: spring-media/la-shared-github-workflows/.github/workflows/reusable-workflow__js__format-lint-test.yml@v1
     secrets:
       NPM_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
       LA_TECH_USER_AUTH_TOKEN: ${{ secrets.LA_TECH_USER_AUTH_TOKEN }}
