@@ -66,7 +66,6 @@ These are the required secrets:
 jobs:
   …
   deploy-branch:
-    needs: format-lint-and-unit-tests
     uses: spring-media/la-shared-github-workflows/.github/workflows/reusable-workflow__js__deploy-to-s3.yaml@v1
     with:
       cloudfront_distribution_id: E26N41SPUCWIRP
@@ -80,6 +79,7 @@ jobs:
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.access_key_id }}
       AWS_ACCESS_KEY_SECRET: ${{ secrets.access_key_secret }}
+      NPM_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
       LA_TECH_USER_AUTH_TOKEN: ${{ secrets.LA_TECH_USER_AUTH_TOKEN }}
 ```
 
