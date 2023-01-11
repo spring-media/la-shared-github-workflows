@@ -69,7 +69,7 @@ jobs:
     uses: spring-media/la-shared-github-workflows/.github/workflows/reusable-workflow__js__deploy-to-s3.yaml@v1
     with:
       cloudfront_distribution_id: E26N41SPUCWIRP
-      cloudfront_paths: /
+      cloudfront_paths: /*
       build_script_name: build-staging
       aws_bucket: s3://hua-mod-web.staging.la.welt.de/${{ github.head_ref || github.ref_name }}
       build_directory: build
