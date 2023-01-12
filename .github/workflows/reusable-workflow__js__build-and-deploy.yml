@@ -25,6 +25,9 @@ on:
         required: true
       NPM_AUTH_TOKEN:
         required: true
+      SLACK_BOT_TOKEN:
+        required: false
+        description: Only required when post_slack_notification input is set to true as well
 
 jobs:
   deploy:
