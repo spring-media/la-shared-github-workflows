@@ -7,6 +7,7 @@ Please refer to githubs documentation on how to use and implement shared workflo
 ### Workflows
 
 - [aws-remove-bucket](#aws-remove-bucket)
+- [js\_\_build-and-deploy](#js__build-and-deploy)
 - [js\_\_deploy-to-s3](#js__deploy-to-s3)
 - [js\_\_format-lint-test](#js__format-lint-test)
 - [js\_\_run-e2e-tests](#js__run-e2e-tests)
@@ -32,7 +33,49 @@ jobs:
   …
 ```
 
-###
+## js\_\_build-and-deploy
+
+The [js\_\_build-and-deploy workflow](./.github/workflows/reusable-workflow__js__build-and-deploy.yml) runs the given
+build and deploy npm scripts to build and deploy a project
+
+Required parameters
+
+- `build_script_name` (string) – the npm command to execute the build.
+- `deploy_script_name` (string) – the npm command to execute the deploy.
+
+Optional parameters
+
+- `post_slack_notification` (boolean) – Whether to post a notification on Team LAs Slack. Should be set to true on production deploys always.
+
+Required secrets:
+
+- `AWS_ACCESS_KEY_ID`
+- `AWS_ACCESS_KEY_SECRET`
+- `LA_TECH_USER_AUTH_TOKEN`
+- `NPM_AUTH_TOKEN`
+
+### Usage
+
+```yaml
+jobs:
+  …
+  deploy-branch:
+    needs: format-lint-and-unit-tests
+    uses: spring-media/la-shared-github-workflows/.github/workflows/reusable-workflow__js__deploy-to-s3.yaml@v1
+    with:
+      cloudfront_distribution_id: E26N41SPUCWIRP
+      cloudfront_paths: /
+      build_script_name: build-staging
+      aws_bucket: s3://hua-mod-web.staging.la.welt.de/${{ github.head_ref || github.ref_name }}
+      build_directory: build
+      branch_deploy: true
+      branch_name: ${{ github.head_ref || github.ref_name }}
+      branch_deploy_base_url: https://hua-mod-web.staging.la.welt.de
+    secrets:
+      AWS_ACCESS_KEY_ID: ${{ secrets.access_key_id }}
+      AWS_ACCESS_KEY_SECRET: ${{ secrets.access_key_secret }}
+      LA_TECH_USER_AUTH_TOKEN: ${{ secrets.LA_TECH_USER_AUTH_TOKEN }}
+```
 
 ## js\_\_deploy-to-s3
 
