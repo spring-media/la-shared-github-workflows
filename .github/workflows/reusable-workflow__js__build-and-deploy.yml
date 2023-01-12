@@ -1,0 +1,78 @@
+name: Build and deploy
+
+on:
+  workflow_call:
+    inputs:
+      build_script_name:
+        required: true
+        type: string
+        description: The name of the npm script to build the project
+      deploy_script_name:
+        required: true
+        type: string
+        description: The name of the npm script to deploy the project
+      post_slack_notification:
+        required: false
+        type: boolean
+        description: Whether to post a notification on Team LAs Slack. Should be used for production deploys only.
+
+    secrets:
+      AWS_ACCESS_KEY_ID:
+        required: true
+      AWS_ACCESS_KEY_SECRET:
+        required: true
+      LA_TECH_USER_AUTH_TOKEN:
+        required: true
+      NPM_AUTH_TOKEN:
+        required: true
+      SLACK_BOT_TOKEN:
+        required: false
+        description: Only required when post_slack_notification input is set to true as well
+
+jobs:
+  deploy:
+    name: Build and deploy the project
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Install node
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: ".node-version"
+          always-auth: true
+          cache: npm
+          registry-url: "https://registry.npmjs.org"
+      - name: Add github npm registry with scope @spring-media to .npmrc
+        run: |
+          echo "//npm.pkg.github.com/:_authToken=${{secrets.LA_TECH_USER_AUTH_TOKEN}}" >> .npmrc
+          echo "@spring-media:registry=https://npm.pkg.github.com" >> .npmrc
+      - name: Install dependencies
+        run: |
+          npm install --ignore-scripts
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
+      - name: Build project
+        run: |
+          npm run clean --if-present
+          npm run ${{ inputs.build_script_name }}
+      - name: Configure AWS creds
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_ACCESS_KEY_SECRET }}
+          aws-region: eu-central-1
+      - name: Deploy the project
+        run: npm run ${{ inputs.deploy_script_name }}
+  slack-notify-after-production-deploy:
+    needs: deploy
+    if: ${{ inputs.post_slack_notification }}
+    uses: spring-media/la-shared-github-workflows/.github/workflows/reusable-workflow__slack-notify-after-production-deploy.yaml@v1
+    with:
+      workflow: ${{ github.workflow }}
+      repository: ${{ github.repository }}
+      repositoryUrl: ${{ github.event.repository.url }}
+      refName: ${{ github.ref_name }}
+      success: ${{ needs.deploy.result == 'success' }}
+    secrets:
+      SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
