@@ -56,7 +56,7 @@ Required secrets:
 
 Optional secrets
 
-- `SLACK_BOT_TOKEN` – only needed when ``
+- `SLACK_BOT_TOKEN` – only needed when `post_slack_notification` is set
 
 ### Usage
 
