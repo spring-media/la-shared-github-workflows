@@ -43,10 +43,6 @@ Required parameters
 - `build_script_name` (string) – the npm command to execute the build.
 - `deploy_script_name` (string) – the npm command to execute the deploy.
 
-Optional parameters
-
-- `post_slack_notification` (boolean) – Whether to post a notification on Team LAs Slack. Should be set to true on production deploys always.
-
 Required secrets:
 
 - `AWS_ACCESS_KEY_ID`
@@ -59,10 +55,11 @@ Required secrets:
 ```yaml
 jobs:
   …
-  uses: spring-media/la-shared-github-workflows/.github/workflows/reusable-workflow__js__build-and-deploy.yml@v1
+  deploy-branch:
+    uses: spring-media/la-shared-github-workflows/.github/workflows/reusable-workflow__js__build-and-deploy.yml@v1
     with:
-      build_script_name: <the name of the packages build script, ususally "build">
-      deploy_script_name: <the name of the packages deploy script, ususally "deploy">
+      build_script_name: <the npm script to build the project>
+      deploy_script_name: <the npm script to deploy the project>
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.access_key_id }}
       AWS_ACCESS_KEY_SECRET: ${{ secrets.access_key_secret }}
