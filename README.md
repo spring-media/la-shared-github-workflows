@@ -43,10 +43,6 @@ Required parameters
 - `build_script_name` (string) – the npm command to execute the build.
 - `deploy_script_name` (string) – the npm command to execute the deploy.
 
-Optional parameters
-
-- `post_slack_notification` (boolean) – Whether to post a notification on Team LAs Slack. Should be set to true on production deploys always.
-
 Required secrets:
 
 - `AWS_ACCESS_KEY_ID`
@@ -54,29 +50,21 @@ Required secrets:
 - `LA_TECH_USER_AUTH_TOKEN`
 - `NPM_AUTH_TOKEN`
 
-Optional secrets
-
-- `SLACK_BOT_TOKEN` – only needed when `post_slack_notification` is set
-
 ### Usage
 
 ```yaml
 jobs:
   …
   deploy-branch:
-    needs: format-lint-and-unit-tests
-    uses: spring-media/la-shared-github-workflows/.github/workflows/reusable-workflow__js__deploy-to-s3.yaml@v1
-   uses: spring-media/la-shared-github-workflows/.github/workflows/reusable-workflow__js__build-and-deploy.yml@v1
-     with:
+    uses: spring-media/la-shared-github-workflows/.github/workflows/reusable-workflow__js__build-and-deploy.yml@v1
+    with:
       build_script_name: <the npm script to build the project>
       deploy_script_name: <the npm script to deploy the project>
-      post_slack_notification: <boolen whether we want to send a message to slack after deploying, optional>
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.access_key_id }}
       AWS_ACCESS_KEY_SECRET: ${{ secrets.access_key_secret }}
       NPM_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
       LA_TECH_USER_AUTH_TOKEN: ${{ secrets.LA_TECH_USER_AUTH_TOKEN }}
-      SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
 ```
 
 ## js\_\_deploy-to-s3
