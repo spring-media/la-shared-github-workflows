@@ -35,9 +35,9 @@ jobs:
       - name: Send failure message to Slack
         if: inputs.success == false
         id: slack-failure
-        uses: slackapi/slack-github-action@v1.17.0
+        uses: slackapi/slack-github-action@v1.23.0
         with:
-          channel-id: 't_loyalty_notifications'
+          channel-id: "t_loyalty_notifications"
           payload: |
             {
               "blocks": [
@@ -76,9 +76,9 @@ jobs:
       - name: Send success message to Slack
         if: inputs.success == true
         id: slack-success
-        uses: slackapi/slack-github-action@v1.17.0
+        uses: slackapi/slack-github-action@v1.23.0
         with:
-          channel-id: 't_loyalty_notifications'
+          channel-id: "t_loyalty_notifications"
           payload: |
             {
               "blocks": [
