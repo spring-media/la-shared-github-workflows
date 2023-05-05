@@ -6,7 +6,7 @@ Please refer to githubs documentation on how to use and implement shared workflo
 
 ### Workflows
 
-- [aws-remove-bucket](#aws-remove-bucket)doc
+- [aws-remove-bucket](#aws-remove-bucket)
 - [js\_\_build-and-deploy](#js__build-and-deploy)
 - [js\_\_deploy-to-s3](#js__deploy-to-s3)
 - [js\_\_format-lint-test](#js__format-lint-test)
