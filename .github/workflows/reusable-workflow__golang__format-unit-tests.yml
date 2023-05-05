@@ -15,6 +15,9 @@ on:
         required: true
       LA_TECH_USER_SSH_KEY:
         required: true
+      BOUNCER_PRIVATE_KEY:
+        required: false
+        description: Bouncer need this for casino auth and can be removed after migrating to cognito auth
 
 jobs:
   format-and-unit-tests:
@@ -76,6 +79,14 @@ jobs:
           EOF
           git config --global url."https://${{ secrets.LA_TECH_USER_AUTH_TOKEN }}:x-oauth-basic@github.com/spring-media".insteadOf "https://github.com/spring-media"
 
+      # this step is needed for bouncer casino auth and can be removed after migrating to cognito auth
+      - name: Copy bouncer private key
+        env:
+          BOUNCER_PRIVATE_KEY: ${{ secrets.BOUNCER_PRIVATE_KEY }}
+        if: secrets.BOUNCER_PRIVATE_KEY != ""
+        run: |
+          echo "$BOUNCER_PRIVATE_KEY" > resources/bouncer_private.pem
+          chmod 600 resources/bouncer_private.pem
       - name: Run unit tests
         run: make test
         env:
