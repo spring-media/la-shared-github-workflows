@@ -36,7 +36,7 @@ jobs:
         with:
           go-version: ${{ inputs.go_version }}
 
-      - name: Check go modules cache
+      - name: Restore go modules cache
         uses: actions/cache@v3
         with:
           path: |
