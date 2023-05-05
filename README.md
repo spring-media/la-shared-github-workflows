@@ -168,7 +168,7 @@ jobs:
 
 ## golang\_\_format-unit-tests
 
-The [golang\_\_format-unit-tests workflow](./.github/workflows/reusable-workflow__golang__format-unit-tests.yml) will set up golang version and format & run unit tests on the project:
+The [golang\_\_format-unit-tests workflow](./.github/workflows/reusable-workflow__golang__format-unit-tests.yml) will set up golang version and check formatted properly and run unit tests on the project.
 
 ### Usage
 
