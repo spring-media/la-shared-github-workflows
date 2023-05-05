@@ -2,6 +2,10 @@ name: Format check, run unit tests
 
 on:
   workflow_call:
+    inputs:
+      go_version:
+        required: true
+        type: string
     secrets:
       ACCESS_KEY_ID:
         required: true
@@ -10,8 +14,6 @@ on:
       LA_TECH_USER_AUTH_TOKEN:
         required: true
       LA_TECH_USER_SSH_KEY:
-        required: true
-      GO_VERSION:
         required: true
 
 jobs:
@@ -32,7 +34,7 @@ jobs:
       - name: Install Go
         uses: actions/setup-go@v3
         with:
-          go-version: ${{ secrets.GO_VERSION }}
+          go-version: ${{ inputs.go_version }}
 
       - name: Check go modules cache
         uses: actions/cache@v3
