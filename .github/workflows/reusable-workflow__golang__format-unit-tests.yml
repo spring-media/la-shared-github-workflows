@@ -55,6 +55,8 @@ jobs:
             exit 1
           fi
 
+      # in some projects when running tests, we might need to pull in dependencies that are
+      # only available in private Github repositories. Therefore we need this setup step
       - name: Setup environment to pull dependencies from non public spring-media repository
         env:
           SSH_KEY: ${{ secrets.LA_TECH_USER_SSH_KEY }}
