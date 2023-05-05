@@ -177,12 +177,14 @@ jobs:
   …
   format-and-unit-tests:
     uses: spring-media/la-shared-github-workflows/.github/workflows/reusable-workflow__golang__format-unit-tests.yml@v1
+    with:
+      go_version: <the go version of the project>
     secrets:
       ACCESS_KEY_ID: ${{ secrets.access_key_id }}
       ACCESS_KEY_SECRET: ${{ secrets.access_key_secret }}
       LA_TECH_USER_AUTH_TOKEN: ${{ secrets.LA_TECH_USER_AUTH_TOKEN }}
       LA_TECH_USER_SSH_KEY: ${{ secrets.la_tech_user_ssh_key }}
-      GOLANG_VERSION: ${{ secrets.GO_VERSION }}
+
 
 
 ## slack-notify-after-production-deploy
