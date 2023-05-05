@@ -83,10 +83,11 @@ jobs:
       - name: Copy bouncer private key
         env:
           BOUNCER_PRIVATE_KEY: ${{ secrets.BOUNCER_PRIVATE_KEY }}
-        if: secrets.BOUNCER_PRIVATE_KEY != ""
         run: |
-          echo "$BOUNCER_PRIVATE_KEY" > resources/bouncer_private.pem
-          chmod 600 resources/bouncer_private.pem
+          if [ "$BOUNCER_PRIVATE_KEY" != '' ]; then
+            echo "$BOUNCER_PRIVATE_KEY" > resources/bouncer_private.pem
+            chmod 600 resources/bouncer_private.pem
+          fi
       - name: Run unit tests
         run: make test
         env:
