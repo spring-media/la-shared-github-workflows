@@ -82,7 +82,8 @@ Required variables to pass in
 
 If using it for branch based deploy you also need to pass in:
 
-- `branch_deploy` (boolean) – Whether the deploy should be branch based (post a comment to the PR after the deploy and sets environment variables when building to set the paths properly in projects)
+- `branch_deploy` (boolean) – Whether the deploy should be branch based (sets environment variables when building to set the paths properly in projects)
+- `comment_branch_link` (boolean) - Wether the branch link should be posted as a comment to the PR after the deploy
 - `branch_name` – the name of the current branch
 - `branch_deploy_base_url` – The base url for the deployed branches
 
