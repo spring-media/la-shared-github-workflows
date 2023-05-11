@@ -1,0 +1,55 @@
+name: Check ulnerabilities
+
+on:
+  workflow_call:
+    inputs:
+      # With this option, only vulnerabilities of the specified level or higher are reported.
+      severity-threshold:
+        required: false
+        type: string
+        default: low
+    secrets:
+      ACCESS_KEY_ID:
+        required: true
+      ACCESS_KEY_SECRET:
+        required: true
+      LA_SNYK_TOKEN:
+        required: true
+
+jobs:
+  check-vulnerabilities:
+    name: Check for vulnerabilities
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v3
+
+      - name: Configure AWS creds
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.ACCESS_KEY_SECRET }}
+          aws-region: eu-central-1
+
+      - name: Install Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: ${{ inputs.go_version }}
+
+      - name: Restore go modules cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+
+      - name: Install Snyk
+        uses: snyk/actions/setup@master
+
+      - name: Run synk test
+        run: synk test --severity-threshold=${{ inputs.severity-threshold }}
+        env:
+          SNYK_TOKEN: ${{ secrets.LA_SNYK_TOKEN }}
