@@ -9,8 +9,10 @@ Please refer to githubs documentation on how to use and implement shared workflo
 - [aws-remove-bucket](#aws-remove-bucket)
 - [js\_\_build-and-deploy](#js__build-and-deploy)
 - [js\_\_deploy-to-s3](#js__deploy-to-s3)
+- [js\_\_check-vulnerabilities](#js__check-vulnerabilities)
 - [js\_\_format-lint-test](#js__format-lint-test)
 - [js\_\_run-e2e-tests](#js__run-e2e-tests)
+- [golang\_\_check-vulnerabilities](#golang__check-vulnerabilities)
 - [golang\_\_format-unit-tests](#golang__format-unit-tests)
 - [slack-notify-after-production-deploy](#slack-notify-after-production-deploy)
 
@@ -118,6 +120,36 @@ jobs:
       LA_TECH_USER_AUTH_TOKEN: ${{ secrets.LA_TECH_USER_AUTH_TOKEN }}
 ```
 
+
+
+## js\_\_check-vulnerabilities
+
+The [js\_\_check-vulnerabilities](./.github/workflows/reusable-workflow__js__check-vulnerabilities.yml) will install synk and check vulnerabilities on the project:
+
+It requires to secrets to be passed in:
+
+- `NPM_AUTH_TOKEN`
+- `LA_TECH_USER_AUTH_TOKEN`
+- `LA_SNYK_TOKEN`
+
+
+- `severity-threshold`  can be passed as input. It's not required but with this option, only vulnerabilities of the specified level or higher will be checked.
+
+The node version has to be set via a `.node-version` file.
+
+### Usage
+
+```yaml
+jobs:
+  …
+  check-vulnerabilities:
+    uses: spring-media/la-shared-github-workflows/.github/workflows/reusable-workflow__js__check-vulnerabilities.yml@v1
+    secrets:
+      NPM_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
+      LA_TECH_USER_AUTH_TOKEN: ${{ secrets.LA_TECH_USER_AUTH_TOKEN }}
+      LA_SNYK_TOKEN:  ${{ secrets.LA_SNYK_TOKEN }}
+```
+
 ## js\_\_format-lint-test
 
 The [js\_\_format-lint-test workflow](./.github/workflows/reusable-workflow__js__format-lint-test.yml) will install dependencies and then run these npm commands on the project:
@@ -166,6 +198,25 @@ jobs:
       LA_TECH_USER_AUTH_TOKEN: ${{ secrets.LA_TECH_USER_AUTH_TOKEN }}
   …
 ```
+
+## golang\_\_check-vulnerabilities
+
+The [golang\_\_check-vulnerabilities workflow](./.github/workflows/reusable-workflow__golang__check-vulnerabilities.yml) will set up synk and check vulnerabilities on the project.
+### Usage
+
+```yaml
+jobs:
+  …
+  check-vulnerabilities:
+    uses: spring-media/la-shared-github-workflows/.github/workflows/reusable-workflow__golang__check-vulnerabilities.yml@v1
+    with:
+      severity-threshold: <vulnerabilities threshold not required and default value is low>
+    secrets:
+      ACCESS_KEY_ID: ${{ secrets.access_key_id }}
+      ACCESS_KEY_SECRET: ${{ secrets.access_key_secret }}
+      LA_SNYK_TOKEN : ${{secrets.LA_SNYK_TOKEN}}
+
+
 
 ## golang\_\_format-unit-tests
 
