@@ -1,0 +1,49 @@
+name: Check vulnerabilities
+
+on:
+  workflow_call:
+    inputs:
+      # With this option, only vulnerabilities of the specified level or higher are reported.
+      severity-threshold:
+        required: false
+        type: string
+        default: low
+
+    secrets:
+      NPM_AUTH_TOKEN:
+        required: true
+      LA_TECH_USER_AUTH_TOKEN:
+        required: true
+      LA_SNYK_TOKEN:
+        required: true
+
+jobs:
+  check-vulnerabilities:
+    name: Check Vulnerabilities
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v3
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: ".node-version"
+          always-auth: true
+          cache: npm
+          registry-url: "https://registry.npmjs.org/"
+      - name: Setup npmrc
+        run: |
+          echo "//npm.pkg.github.com/:_authToken=${{secrets.LA_TECH_USER_AUTH_TOKEN}}" >> .npmrc
+          echo "@spring-media:registry=https://npm.pkg.github.com" >> .npmrc
+        env:
+          LA_TECH_USER_AUTH_TOKEN: ${{ secrets.LA_TECH_USER_AUTH_TOKEN }}
+      - name: Install dependencies
+        run: npm install --ignore-scripts
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
+      - name: Install Snyk
+        uses: snyk/actions/setup@master
+      - name: Run synk test
+        run: synk test --severity-threshold=${{ inputs.severity-threshold }}
+        env:
+          SNYK_TOKEN: ${{ secrets.LA_SNYK_TOKEN }}
