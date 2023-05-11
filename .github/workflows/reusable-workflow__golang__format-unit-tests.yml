@@ -1,0 +1,83 @@
+name: Format check, run unit tests
+
+on:
+  workflow_call:
+    inputs:
+      go_version:
+        required: true
+        type: string
+    secrets:
+      ACCESS_KEY_ID:
+        required: true
+      ACCESS_KEY_SECRET:
+        required: true
+      LA_TECH_USER_AUTH_TOKEN:
+        required: true
+      LA_TECH_USER_SSH_KEY:
+        required: true
+
+jobs:
+  format-and-unit-tests:
+    name: Format and run unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v3
+
+      - name: Configure AWS creds
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.ACCESS_KEY_SECRET }}
+          aws-region: eu-central-1
+
+      - name: Install Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: ${{ inputs.go_version }}
+
+      - name: Restore go modules cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+
+      - name: Check go formatting
+        run: |
+          GOFMT_OUTPUT="$(gofmt -l . 2>&1)"
+          if [ -n "$GOFMT_OUTPUT" ]; then
+            echo "All the following files are not correctly formatted"
+            echo "${GOFMT_OUTPUT}"
+            exit 1
+          fi
+
+      # in some projects when running tests, we might need to pull in dependencies that are
+      # only available in private Github repositories. Therefore we need this setup step
+      - name: Setup environment to pull dependencies from non public spring-media repository
+        env:
+          SSH_KEY: ${{ secrets.LA_TECH_USER_SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          touch  ~/.ssh/id_rsa
+          echo "$SSH_KEY" > ~/.ssh/id_rsa
+          chmod 400  ~/.ssh/id_rsa
+          touch ~/.ssh/config
+          export location=~
+          cat << EOF > ~/.ssh/config
+            Host github.com
+              User git
+              Hostname github.com
+              PreferredAuthentications publickey
+              IdentityFile $location/.ssh/id_rsa
+          EOF
+          git config --global url."https://${{ secrets.LA_TECH_USER_AUTH_TOKEN }}:x-oauth-basic@github.com/spring-media".insteadOf "https://github.com/spring-media"
+
+      - name: Run unit tests
+        run: make test
+        env:
+          GITHUB_TOKEN: ${{ secrets.LA_TECH_USER_AUTH_TOKEN }}
+          GOPRIVATE: github.com/spring-media/*

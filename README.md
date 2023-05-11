@@ -11,6 +11,7 @@ Please refer to githubs documentation on how to use and implement shared workflo
 - [js\_\_deploy-to-s3](#js__deploy-to-s3)
 - [js\_\_format-lint-test](#js__format-lint-test)
 - [js\_\_run-e2e-tests](#js__run-e2e-tests)
+- [golang\_\_format-unit-tests](#golang__format-unit-tests)
 - [slack-notify-after-production-deploy](#slack-notify-after-production-deploy)
 
 ## aws-remove-bucket
@@ -164,6 +165,27 @@ jobs:
       LA_TECH_USER_AUTH_TOKEN: ${{ secrets.LA_TECH_USER_AUTH_TOKEN }}
   …
 ```
+
+## golang\_\_format-unit-tests
+
+The [golang\_\_format-unit-tests workflow](./.github/workflows/reusable-workflow__golang__format-unit-tests.yml) will set up golang version and check formatted properly and run unit tests on the project.
+
+### Usage
+
+```yaml
+jobs:
+  …
+  format-and-unit-tests:
+    uses: spring-media/la-shared-github-workflows/.github/workflows/reusable-workflow__golang__format-unit-tests.yml@v1
+    with:
+      go_version: <the go version of the project>
+    secrets:
+      ACCESS_KEY_ID: ${{ secrets.access_key_id }}
+      ACCESS_KEY_SECRET: ${{ secrets.access_key_secret }}
+      LA_TECH_USER_AUTH_TOKEN: ${{ secrets.LA_TECH_USER_AUTH_TOKEN }}
+      LA_TECH_USER_SSH_KEY: ${{ secrets.la_tech_user_ssh_key }}
+
+
 
 ## slack-notify-after-production-deploy
 
