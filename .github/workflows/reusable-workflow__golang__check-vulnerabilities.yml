@@ -8,6 +8,9 @@ on:
         required: false
         type: string
         default: low
+      go-version:
+        required: true
+        type: string
     secrets:
       ACCESS_KEY_ID:
         required: true
@@ -34,7 +37,7 @@ jobs:
       - name: Install Go
         uses: actions/setup-go@v3
         with:
-          go-version: ${{ inputs.go_version }}
+          go-version: ${{ inputs.go-version }}
 
       - name: Restore go modules cache
         uses: actions/cache@v3

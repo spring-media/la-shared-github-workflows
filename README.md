@@ -211,11 +211,13 @@ jobs:
     uses: spring-media/la-shared-github-workflows/.github/workflows/reusable-workflow__golang__check-vulnerabilities.yml@v1
     with:
       severity-threshold: <vulnerabilities threshold not required and default value is low>
+      go-version: <the go version of the project>
     secrets:
       ACCESS_KEY_ID: ${{ secrets.access_key_id }}
       ACCESS_KEY_SECRET: ${{ secrets.access_key_secret }}
       LA_SNYK_TOKEN : ${{secrets.LA_SNYK_TOKEN}}
-
+  …
+```
 
 
 ## golang\_\_format-unit-tests
