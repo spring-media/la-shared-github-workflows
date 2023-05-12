@@ -1,4 +1,4 @@
-name: Check ulnerabilities
+name: Check vulnerabilities
 
 on:
   workflow_call:
