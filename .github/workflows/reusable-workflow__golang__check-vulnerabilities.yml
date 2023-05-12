@@ -52,7 +52,7 @@ jobs:
       - name: Install Snyk
         uses: snyk/actions/setup@master
 
-      - name: Run synk test
-        run: synk test --severity-threshold=${{ inputs.severity-threshold }}
+      - name: Run snyk test
+        run: snyk test --severity-threshold=${{ inputs.severity-threshold }}
         env:
           SNYK_TOKEN: ${{ secrets.LA_SNYK_TOKEN }}
