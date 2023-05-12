@@ -11,6 +11,7 @@ Please refer to githubs documentation on how to use and implement shared workflo
 - [js\_\_deploy-to-s3](#js__deploy-to-s3)
 - [js\_\_format-lint-test](#js__format-lint-test)
 - [js\_\_run-e2e-tests](#js__run-e2e-tests)
+- [golang\_\_security](#golang__security)
 - [golang\_\_format-unit-tests](#golang__format-unit-tests)
 - [slack-notify-after-production-deploy](#slack-notify-after-production-deploy)
 
@@ -166,6 +167,28 @@ jobs:
       LA_TECH_USER_AUTH_TOKEN: ${{ secrets.LA_TECH_USER_AUTH_TOKEN }}
   …
 ```
+
+
+## golang\_\_security
+
+ The [golang\_\_security workflow](./.github/workflows/reusable-workflow__golang__security.yml) will set up synk and check vulnerabilities on the project.
+ ### Usage
+
+ ```yaml
+ jobs:
+   …
+   security:
+     uses: spring-media/la-shared-github-workflows/.github/workflows/reusable-workflow__golang__security.yml@v1
+     with:
+       severity-threshold: <vulnerabilities threshold not required and default value is low>
+       go-version: <the go version of the project>
+     secrets:
+       ACCESS_KEY_ID: ${{ secrets.access_key_id }}
+       ACCESS_KEY_SECRET: ${{ secrets.access_key_secret }}
+       LA_SNYK_TOKEN : ${{secrets.LA_SNYK_TOKEN}}
+   …
+ ```
+
 
 ## golang\_\_format-unit-tests
 
