@@ -42,6 +42,13 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
 
+      - name: Install Snyk
+        uses: snyk/actions/setup@master
+      - name: Run synk test
+        run: synk test --severity-threshold=${{ inputs.severity-threshold }}
+        env:
+          SNYK_TOKEN: ${{ secrets.LA_SNYK_TOKEN }}
+
       - name: Leaked Secrets Scan
         uses: trufflesecurity/trufflehog@main
         with:
