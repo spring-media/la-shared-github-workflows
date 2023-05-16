@@ -16,6 +16,10 @@ on:
         required: true
       ACCESS_KEY_SECRET:
         required: true
+      LA_TECH_USER_AUTH_TOKEN:
+        required: true
+      LA_TECH_USER_SSH_KEY:
+        required: true
       LA_SNYK_TOKEN:
         required: true
 
@@ -26,13 +30,8 @@ jobs:
     steps:
       - name: Checkout branch
         uses: actions/checkout@v3
-
-      - name: Configure AWS creds
-        uses: aws-actions/configure-aws-credentials@v2
         with:
-          aws-access-key-id: ${{ secrets.ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.ACCESS_KEY_SECRET }}
-          aws-region: eu-central-1
+          fetch-depth: 0 # Entire Git history of the repository will be fetched
 
       - name: Install Go
         uses: actions/setup-go@v3
@@ -49,6 +48,32 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-go-
 
+      - name: Configure AWS creds
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.ACCESS_KEY_SECRET }}
+          aws-region: eu-central-1
+
+      - name: Setup environment to pull dependencies from non public spring-media repository
+        env:
+          SSH_KEY: ${{ secrets.LA_TECH_USER_SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          touch  ~/.ssh/id_rsa
+          echo "$SSH_KEY" > ~/.ssh/id_rsa
+          chmod 400  ~/.ssh/id_rsa
+          touch ~/.ssh/config
+          export location=~
+          cat << EOF > ~/.ssh/config
+            Host github.com
+              User git
+              Hostname github.com
+              PreferredAuthentications publickey
+              IdentityFile $location/.ssh/id_rsa
+          EOF
+          git config --global url."https://${{ secrets.LA_TECH_USER_AUTH_TOKEN }}:x-oauth-basic@github.com/spring-media".insteadOf "https://github.com/spring-media"
+
       - name: Install Snyk
         uses: snyk/actions/setup@master
 
@@ -56,11 +81,13 @@ jobs:
         run: snyk test --severity-threshold=${{ inputs.severity-threshold }}
         env:
           SNYK_TOKEN: ${{ secrets.LA_SNYK_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.LA_TECH_USER_AUTH_TOKEN }}
+          GOPRIVATE: github.com/spring-media/*
 
       - name: Leaked Secrets Scan
         uses: trufflesecurity/trufflehog@main
         with:
           path: ./
-          base: ${{ github.event.repository.default_branch }}
+          base: ${{ github.event.repository.default_branch }} # Start scanning from default main branch
           head: HEAD
           extra_args: --debug --only-verified
