@@ -185,8 +185,7 @@ jobs:
       ACCESS_KEY_SECRET: ${{ secrets.access_key_secret }}
       LA_TECH_USER_AUTH_TOKEN: ${{ secrets.LA_TECH_USER_AUTH_TOKEN }}
       LA_TECH_USER_SSH_KEY: ${{ secrets.la_tech_user_ssh_key }}
-
-
+```
 
 ## slack-notify-after-production-deploy
 
