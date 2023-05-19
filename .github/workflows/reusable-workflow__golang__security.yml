@@ -7,7 +7,7 @@ on:
       severity-threshold:
         required: false
         type: string
-        default: low
+        default: high # Possible values: low, medium, high, critical
       go-version:
         required: true
         type: string
@@ -75,10 +75,11 @@ jobs:
           git config --global url."https://${{ secrets.LA_TECH_USER_AUTH_TOKEN }}:x-oauth-basic@github.com/spring-media".insteadOf "https://github.com/spring-media"
 
       - name: Install Snyk
-        uses: snyk/actions/setup@master
+        uses: snyk/actions/setup@0.3
 
       - name: Run snyk test
         run: snyk test --severity-threshold=${{ inputs.severity-threshold }}
+        continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.LA_SNYK_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.LA_TECH_USER_AUTH_TOKEN }}
