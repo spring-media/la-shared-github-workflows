@@ -10,7 +10,9 @@ Please refer to githubs documentation on how to use and implement shared workflo
 - [js\_\_build-and-deploy](#js__build-and-deploy)
 - [js\_\_deploy-to-s3](#js__deploy-to-s3)
 - [js\_\_format-lint-test](#js__format-lint-test)
+- [js\_\_security](#js__security)
 - [js\_\_run-e2e-tests](#js__run-e2e-tests)
+- [golang\_\_security](#golang__security)
 - [golang\_\_format-unit-tests](#golang__format-unit-tests)
 - [slack-notify-after-production-deploy](#slack-notify-after-production-deploy)
 
@@ -148,6 +150,34 @@ jobs:
       LA_TECH_USER_AUTH_TOKEN: ${{ secrets.LA_TECH_USER_AUTH_TOKEN }}
 ```
 
+# js\_\_security
+
+ The [js\_\_security](./.github/workflows/reusable-workflow__js__security.yml) will install synk and check vulnerabilities on the project:
+
+ It requires to secrets to be passed in:
+
+ - `NPM_AUTH_TOKEN`
+ - `LA_TECH_USER_AUTH_TOKEN`
+ - `LA_SNYK_TOKEN`
+
+
+ - `severity-threshold`  can be passed as input. It's not required but with this option, only vulnerabilities of the specified level or higher will be checked.
+
+ The node version has to be set via a `.node-version` file.
+
+ ### Usage
+
+ ```yaml
+ jobs:
+   …
+  security:
+    uses: spring-media/la-shared-github-workflows/.github/workflows/reusable-workflow__js__security.yml@v1
+     secrets:
+       NPM_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
+       LA_TECH_USER_AUTH_TOKEN: ${{ secrets.LA_TECH_USER_AUTH_TOKEN }}
+       LA_SNYK_TOKEN:  ${{ secrets.LA_SNYK_TOKEN }}
+ ```
+
 ## js\_\_run-e2e-tests
 
 [js\_\_run-e2e-tests workflow](./.github/workflows/reusable-workflow__js__run-e2e-tests.yaml) will setup up a job that will run all the cypress tests configured in your project
@@ -166,6 +196,28 @@ jobs:
       LA_TECH_USER_AUTH_TOKEN: ${{ secrets.LA_TECH_USER_AUTH_TOKEN }}
   …
 ```
+
+
+## golang\_\_security
+
+ The [golang\_\_security workflow](./.github/workflows/reusable-workflow__golang__security.yml) will set up synk and check vulnerabilities on the project.
+ ### Usage
+
+ ```yaml
+ jobs:
+   …
+   security:
+     uses: spring-media/la-shared-github-workflows/.github/workflows/reusable-workflow__golang__security.yml@v1
+     with:
+       severity-threshold: <vulnerabilities threshold not required and default value is low>
+       go-version: <the go version of the project>
+     secrets:
+       ACCESS_KEY_ID: ${{ secrets.access_key_id }}
+       ACCESS_KEY_SECRET: ${{ secrets.access_key_secret }}
+       LA_SNYK_TOKEN : ${{secrets.LA_SNYK_TOKEN}}
+   …
+ ```
+
 
 ## golang\_\_format-unit-tests
 
