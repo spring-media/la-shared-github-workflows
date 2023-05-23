@@ -85,7 +85,6 @@ jobs:
       - name: Run snyk test
         if: inputs.check-snyk == true
         run: snyk test --severity-threshold=${{ inputs.severity-threshold }}
-        continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.LA_SNYK_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.LA_TECH_USER_AUTH_TOKEN }}
