@@ -8,6 +8,10 @@ on:
         required: false
         type: string
         default: low
+      check-snyk:
+        type: boolean
+        required: false
+        default: false
 
     secrets:
       NPM_AUTH_TOKEN:
@@ -45,6 +49,7 @@ jobs:
       - name: Install Snyk
         uses: snyk/actions/setup@master
       - name: Run synk test
+        if: inputs.check-snyk == true
         run: snyk test --severity-threshold=${{ inputs.severity-threshold }}
         env:
           SNYK_TOKEN: ${{ secrets.LA_SNYK_TOKEN }}

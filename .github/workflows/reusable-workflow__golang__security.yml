@@ -11,6 +11,11 @@ on:
       go-version:
         required: true
         type: string
+      check-snyk:
+        type: boolean
+        required: false
+        default: false
+
     secrets:
       ACCESS_KEY_ID:
         required: true
@@ -78,6 +83,7 @@ jobs:
         uses: snyk/actions/setup@0.3
 
       - name: Run snyk test
+        if: inputs.check-snyk == true
         run: snyk test --severity-threshold=${{ inputs.severity-threshold }}
         continue-on-error: true
         env:
