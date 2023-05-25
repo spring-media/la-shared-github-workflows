@@ -163,7 +163,7 @@ It requires to secrets to be passed in:
 Optional paramaters
 
 - `snyk-severity-threshold`  can be passed as input. It's not required but with this option, only vulnerabilities of the specified level or higher will be checked.
-- `check-snyk` (boolean) should be passed true as input to run snyk test
+- `check-snyk` (boolean) default value is true and should be passed false to not run snyk test
 
 The node version has to be set via a `.node-version` file.
 
@@ -217,7 +217,7 @@ Required parameters
 
 Optional parameters
 - `snyk-severity-threshold` can be passed as input. It's not required but with this option, default value is critical, only vulnerabilities of the specified level or higher will be checked.
-- `check-snyk` (boolean) should be passed true as input to run snyk test
+- `check-snyk` (boolean) default value is true and should be passed false to not run snyk test
 
 ### Usage
 

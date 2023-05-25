@@ -11,7 +11,7 @@ on:
       check-snyk:
         type: boolean
         required: false
-        default: false
+        default: true
 
     secrets:
       NPM_AUTH_TOKEN:
