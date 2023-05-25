@@ -162,7 +162,7 @@ It requires to secrets to be passed in:
 
 Optional paramaters
 
-- `severity-threshold`  can be passed as input. It's not required but with this option, only vulnerabilities of the specified level or higher will be checked.
+- `snyk-severity-threshold`  can be passed as input. It's not required but with this option, only vulnerabilities of the specified level or higher will be checked.
 - `check-snyk` (boolean) should be passed true as input to run snyk test
 
 The node version has to be set via a `.node-version` file.
@@ -216,7 +216,7 @@ Required parameters
 - `go-version` the go version of the project
 
 Optional parameters
-- `severity-threshold` can be passed as input. It's not required but with this option, only vulnerabilities of the specified level or higher will be checked.
+- `snyk-severity-threshold` can be passed as input. It's not required but with this option, default value is critical, only vulnerabilities of the specified level or higher will be checked.
 - `check-snyk` (boolean) should be passed true as input to run snyk test
 
 ### Usage
@@ -227,7 +227,7 @@ jobs:
   security:
     uses: spring-media/la-shared-github-workflows/.github/workflows/reusable-workflow__golang__security.yml@v1
     with:
-      severity-threshold: <vulnerabilities threshold not required and default value is low>
+      snyk-severity-threshold: <vulnerabilities threshold not required and default value is critical>
       go-version: <the go version of the project>
     secrets:
       ACCESS_KEY_ID: ${{ secrets.access_key_id }}

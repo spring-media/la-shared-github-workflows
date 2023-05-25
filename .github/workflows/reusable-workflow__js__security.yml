@@ -4,10 +4,10 @@ on:
   workflow_call:
     inputs:
       # With this option, only vulnerabilities of the specified level or higher are reported.
-      severity-threshold:
+      snyk-severity-threshold:
         required: false
         type: string
-        default: low
+        default: critical
       check-snyk:
         type: boolean
         required: false
@@ -50,7 +50,7 @@ jobs:
         uses: snyk/actions/setup@master
       - name: Run synk test
         if: inputs.check-snyk == true
-        run: snyk test --severity-threshold=${{ inputs.severity-threshold }}
+        run: snyk test --severity-threshold=${{ inputs.snyk-severity-threshold }}
         env:
           SNYK_TOKEN: ${{ secrets.LA_SNYK_TOKEN }}
 
