@@ -277,7 +277,7 @@ jobs:
     with:
       workflow: ${{ github.workflow }}
       repository: ${{ github.repository }}
-      repositoryUrl: ${{ github.event.repository.url }}
+      repositoryUrl: ${{ github.event.repository.html_url }}
       refName: ${{ github.ref_name }}
       success: ${{ needs.<ADD JOB ID>.result == 'success' }}
     secrets:
