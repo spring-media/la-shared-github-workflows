@@ -4,10 +4,10 @@ on:
   workflow_call:
     inputs:
       # With this option, only vulnerabilities of the specified level or higher are reported.
-      severity-threshold:
+      snyk-severity-threshold:
         required: false
         type: string
-        default: low
+        default: critical
 
     secrets:
       NPM_AUTH_TOKEN:

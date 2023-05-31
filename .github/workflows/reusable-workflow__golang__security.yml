@@ -4,13 +4,14 @@ on:
   workflow_call:
     inputs:
       # With this option, only vulnerabilities of the specified level or higher are reported.
-      severity-threshold:
+      snyk-severity-threshold:
         required: false
         type: string
-        default: high # Possible values: low, medium, high, critical
+        default: critical # Possible values: low, medium, high, critical
       go-version:
         required: true
         type: string
+
     secrets:
       ACCESS_KEY_ID:
         required: true
@@ -78,8 +79,7 @@ jobs:
         uses: snyk/actions/setup@0.3
 
       - name: Run snyk test
-        run: snyk test --severity-threshold=${{ inputs.severity-threshold }}
-        continue-on-error: true
+        run: snyk test --severity-threshold=${{ inputs.snyk-severity-threshold }}
         env:
           SNYK_TOKEN: ${{ secrets.LA_SNYK_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.LA_TECH_USER_AUTH_TOKEN }}
