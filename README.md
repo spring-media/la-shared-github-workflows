@@ -305,7 +305,7 @@ jobs:
     with:
       workflow: ${{ github.workflow }}
       repository: ${{ github.repository }}
-      repositoryUrl: ${{ github.event.repository.url }}
+      repositoryUrl: ${{ github.event.repository.html_url }}
       refName: ${{ github.ref_name }}
       success: ${{ needs.<ADD JOB ID>.result == 'success' }}
     secrets:
@@ -314,16 +314,26 @@ jobs:
 
 ## Releasing
 
-Versioned releases for workflows are done via tags. The whole process is described here: https://github.com/actions/toolkit/blob/main/docs/action-versioning.md
+Whenever any shared workflow is updated or added, we must release a new version. Having the workflows versioned allows users of the shared workflows to bind to
+a specific version of an action.
 
-Since all the shared actions live in one repository, we only have a unified tag for all workflows.
-The current version is `v1`. Should you make any major breaking changes please increment the major version number.
-For patch and minor upgrades please consider creating a new semver release as well as updating the
-major version tag so that all actions. This is best practice and described in the document linked above.
+Semver version number update guide for the shared github action workflows:
+
+- Patch version: Fixing a problem with an existing action without changing anything (e.g. `v1.5.6` ➡️ `v1.5.7`)
+- Minor version: Adding new actions, adding functionality to actions without breaking existing functionality (e.g. `v1.5.6` ➡️ `v.1.6.0`)
+- Major versions: Any breaking change to existing actions (e.g. `v1.5.6` ➡️ `v2.0.0`)
+
+Releasing a new version is currently a manual process: https://github.com/spring-media/la-shared-github-workflows/releases/new
+
+In addition to the semver version release we also have a major version tag that tracks the latest semver version. 
+This allows user to bing to the latest major version of the shared workflows and automatically get all improvements, but no 
+breaking changes.
+
+When you release a new version you must update the `v1` tag like so
 
 ```
 git tag -fa v1 -m "Update v1 tag"
 git push origin v1 --force
 ```
 
-Please note that this is currently a manual process. This might change in the future.
+This whole process is best practice and described here: https://github.com/actions/toolkit/blob/main/docs/action-versioning.md
