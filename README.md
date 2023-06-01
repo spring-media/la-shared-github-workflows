@@ -156,15 +156,11 @@ The [js\_\_security](./.github/workflows/reusable-workflow__js__security.yml) wi
 
 It requires to secrets to be passed in:
 
-- `NPM_AUTH_TOKEN`
-- `LA_TECH_USER_AUTH_TOKEN`
 - `LA_SNYK_TOKEN`
 
 Optional paramaters
 
 - `snyk-severity-threshold`  can be passed as input. It's not required but with this option, only vulnerabilities of the specified level or higher will be checked.
-
-The node version has to be set via a `.node-version` file.
 
 ### Usage
 
@@ -174,8 +170,6 @@ jobs:
   security:
     uses: spring-media/la-shared-github-workflows/.github/workflows/reusable-workflow__js__security.yml@v1
      secrets:
-       NPM_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
-       LA_TECH_USER_AUTH_TOKEN: ${{ secrets.LA_TECH_USER_AUTH_TOKEN }}
        LA_SNYK_TOKEN:  ${{ secrets.LA_SNYK_TOKEN }}
 ```
 
