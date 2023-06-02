@@ -150,33 +150,28 @@ jobs:
       LA_TECH_USER_AUTH_TOKEN: ${{ secrets.LA_TECH_USER_AUTH_TOKEN }}
 ```
 
-# js\_\_security
+## js\_\_security
 
- The [js\_\_security](./.github/workflows/reusable-workflow__js__security.yml) will install synk and check vulnerabilities on the project:
+The [js\_\_security](./.github/workflows/reusable-workflow__js__security.yml) will install synk and check vulnerabilities on the project:
 
- It requires to secrets to be passed in:
+It requires to secrets to be passed in:
 
- - `NPM_AUTH_TOKEN`
- - `LA_TECH_USER_AUTH_TOKEN`
- - `LA_SNYK_TOKEN`
+- `LA_SNYK_TOKEN`
 
+Optional paramaters
 
- - `severity-threshold`  can be passed as input. It's not required but with this option, only vulnerabilities of the specified level or higher will be checked.
+- `snyk-severity-threshold`  can be passed as input. It's not required but with this option, only vulnerabilities of the specified level or higher will be checked.
 
- The node version has to be set via a `.node-version` file.
+### Usage
 
- ### Usage
-
- ```yaml
- jobs:
-   …
+```yaml
+jobs:
+  …
   security:
     uses: spring-media/la-shared-github-workflows/.github/workflows/reusable-workflow__js__security.yml@v1
      secrets:
-       NPM_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
-       LA_TECH_USER_AUTH_TOKEN: ${{ secrets.LA_TECH_USER_AUTH_TOKEN }}
        LA_SNYK_TOKEN:  ${{ secrets.LA_SNYK_TOKEN }}
- ```
+```
 
 ## js\_\_run-e2e-tests
 
@@ -197,31 +192,54 @@ jobs:
   …
 ```
 
-
 ## golang\_\_security
 
- The [golang\_\_security workflow](./.github/workflows/reusable-workflow__golang__security.yml) will set up synk and check vulnerabilities on the project.
- ### Usage
+The [golang\_\_security workflow](./.github/workflows/reusable-workflow__golang__security.yml) will set up synk and check vulnerabilities on the project.
 
- ```yaml
- jobs:
-   …
-   security:
-     uses: spring-media/la-shared-github-workflows/.github/workflows/reusable-workflow__golang__security.yml@v1
-     with:
-       severity-threshold: <vulnerabilities threshold not required and default value is low>
-       go-version: <the go version of the project>
-     secrets:
-       ACCESS_KEY_ID: ${{ secrets.access_key_id }}
-       ACCESS_KEY_SECRET: ${{ secrets.access_key_secret }}
-       LA_SNYK_TOKEN : ${{secrets.LA_SNYK_TOKEN}}
-   …
- ```
 
+Rquired secrets
+
+- `LA_TECH_USER_AUTH_TOKEN`
+- `LA_TECH_USER_SSH_KEY`
+- `LA_SNYK_TOKEN`
+
+Required parameters
+- `go-version` the go version of the project
+
+Optional parameters
+- `snyk-severity-threshold` can be passed as input. It's not required but with this option, default value is critical, only vulnerabilities of the specified level or higher will be checked.
+
+### Usage
+
+```yaml
+jobs:
+  …
+  security:
+    uses: spring-media/la-shared-github-workflows/.github/workflows/reusable-workflow__golang__security.yml@v1
+    with:
+      snyk-severity-threshold: <vulnerabilities threshold not required and default value is critical>
+      go-version: <the go version of the project>
+    secrets:
+      LA_TECH_USER_AUTH_TOKEN: ${{ secrets.LA_TECH_USER_AUTH_TOKEN }}
+      LA_TECH_USER_SSH_KEY: ${{ secrets.LA_TECH_USER_SSH_KEY }}
+      LA_SNYK_TOKEN : ${{secrets.LA_SNYK_TOKEN}}
+  …
+```
 
 ## golang\_\_format-unit-tests
 
 The [golang\_\_format-unit-tests workflow](./.github/workflows/reusable-workflow__golang__format-unit-tests.yml) will set up golang version and check formatted properly and run unit tests on the project.
+
+Rquired secrets
+
+- `ACCESS_KEY_ID`
+- `ACCESS_KEY_SECRET`
+- `LA_TECH_USER_AUTH_TOKEN`
+- `LA_TECH_USER_SSH_KEY`
+
+Required parameters
+- `go-version` the go version of the project
+
 
 ### Usage
 
@@ -236,7 +254,7 @@ jobs:
       ACCESS_KEY_ID: ${{ secrets.access_key_id }}
       ACCESS_KEY_SECRET: ${{ secrets.access_key_secret }}
       LA_TECH_USER_AUTH_TOKEN: ${{ secrets.LA_TECH_USER_AUTH_TOKEN }}
-      LA_TECH_USER_SSH_KEY: ${{ secrets.la_tech_user_ssh_key }}
+      LA_TECH_USER_SSH_KEY: ${{ secrets.LA_TECH_USER_SSH_KEY }}
 ```
 
 ## slack-notify-after-production-deploy
@@ -309,4 +327,3 @@ git push origin v1 --force
 ```
 
 This whole process is best practice and described here: https://github.com/actions/toolkit/blob/main/docs/action-versioning.md
-

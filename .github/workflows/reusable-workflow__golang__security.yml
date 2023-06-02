@@ -4,18 +4,15 @@ on:
   workflow_call:
     inputs:
       # With this option, only vulnerabilities of the specified level or higher are reported.
-      severity-threshold:
+      snyk-severity-threshold:
         required: false
         type: string
-        default: high # Possible values: low, medium, high, critical
+        default: critical # Possible values: low, medium, high, critical
       go-version:
         required: true
         type: string
+
     secrets:
-      ACCESS_KEY_ID:
-        required: true
-      ACCESS_KEY_SECRET:
-        required: true
       LA_TECH_USER_AUTH_TOKEN:
         required: true
       LA_TECH_USER_SSH_KEY:
@@ -48,13 +45,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-go-
 
-      - name: Configure AWS creds
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-access-key-id: ${{ secrets.ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.ACCESS_KEY_SECRET }}
-          aws-region: eu-central-1
-
+      # When we run snyk test it check go.mod file and list all dependencies and go through on all packages.
+      # We have private repos that's why we need this step.
       - name: Setup environment to pull dependencies from non public spring-media repository
         env:
           SSH_KEY: ${{ secrets.LA_TECH_USER_SSH_KEY }}
@@ -75,11 +67,10 @@ jobs:
           git config --global url."https://${{ secrets.LA_TECH_USER_AUTH_TOKEN }}:x-oauth-basic@github.com/spring-media".insteadOf "https://github.com/spring-media"
 
       - name: Install Snyk
-        uses: snyk/actions/setup@0.3
+        uses: snyk/actions/setup@0.4.0
 
       - name: Run snyk test
-        run: snyk test --severity-threshold=${{ inputs.severity-threshold }}
-        continue-on-error: true
+        run: snyk test --severity-threshold=${{ inputs.snyk-severity-threshold }}
         env:
           SNYK_TOKEN: ${{ secrets.LA_SNYK_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.LA_TECH_USER_AUTH_TOKEN }}
