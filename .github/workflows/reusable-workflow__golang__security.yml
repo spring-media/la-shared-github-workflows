@@ -45,6 +45,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-go-
 
+      # When we run snyk test it check go.mod file and list all dependencies and go through on all packages.
+      # We have private repos that's why we need this step.
       - name: Setup environment to pull dependencies from non public spring-media repository
         env:
           SSH_KEY: ${{ secrets.LA_TECH_USER_SSH_KEY }}
