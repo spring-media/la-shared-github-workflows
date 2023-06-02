@@ -199,8 +199,6 @@ The [golang\_\_security workflow](./.github/workflows/reusable-workflow__golang_
 
 Rquired secrets
 
-- `ACCESS_KEY_ID`
-- `ACCESS_KEY_SECRET`
 - `LA_TECH_USER_AUTH_TOKEN`
 - `LA_TECH_USER_SSH_KEY`
 - `LA_SNYK_TOKEN`
@@ -222,8 +220,6 @@ jobs:
       snyk-severity-threshold: <vulnerabilities threshold not required and default value is critical>
       go-version: <the go version of the project>
     secrets:
-      ACCESS_KEY_ID: ${{ secrets.access_key_id }}
-      ACCESS_KEY_SECRET: ${{ secrets.access_key_secret }}
       LA_TECH_USER_AUTH_TOKEN: ${{ secrets.LA_TECH_USER_AUTH_TOKEN }}
       LA_TECH_USER_SSH_KEY: ${{ secrets.LA_TECH_USER_SSH_KEY }}
       LA_SNYK_TOKEN : ${{secrets.LA_SNYK_TOKEN}}
