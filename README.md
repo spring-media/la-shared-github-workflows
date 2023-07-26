@@ -152,13 +152,16 @@ jobs:
 
 ## js\_\_security
 
-The [js\_\_security](./.github/workflows/reusable-workflow__js__security.yml) will install synk and check vulnerabilities on the project:
+The [js\_\_security](./.github/workflows/reusable-workflow__js__security.yml) will 
 
-It requires to secrets to be passed in:
+- install snyk and check for vulnerabilities on the project
+- check for leaked secrets using [trufflehog](https://github.com/trufflesecurity/trufflehog)
+
+Required secrets:
 
 - `LA_SNYK_TOKEN`
 
-Optional paramaters
+Optional inputs:
 
 - `snyk-severity-threshold`  can be passed as input. It's not required but with this option, only vulnerabilities of the specified level or higher will be checked.
 
@@ -194,19 +197,21 @@ jobs:
 
 ## golang\_\_security
 
-The [golang\_\_security workflow](./.github/workflows/reusable-workflow__golang__security.yml) will set up synk and check vulnerabilities on the project.
+The [golang\_\_security workflow](./.github/workflows/reusable-workflow__golang__security.yml) will 
 
+- set up snyk and check vulnerabilities on the project
+- check for leaked secrets using [trufflehog](https://github.com/trufflesecurity/trufflehog)
 
-Rquired secrets
+Required secrets:
 
 - `LA_TECH_USER_AUTH_TOKEN`
 - `LA_TECH_USER_SSH_KEY`
 - `LA_SNYK_TOKEN`
 
-Required parameters
+Required inputs:
 - `go-version` the go version of the project
 
-Optional parameters
+Optional inputs:
 - `snyk-severity-threshold` can be passed as input. It's not required but with this option, default value is critical, only vulnerabilities of the specified level or higher will be checked.
 
 ### Usage
