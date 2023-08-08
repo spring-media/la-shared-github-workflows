@@ -163,7 +163,7 @@ Required secrets:
 
 Optional inputs:
 
-- `snyk-severity-threshold`  can be passed as input. It's not required but with this option, only vulnerabilities of the specified level or higher will be checked.
+- `snyk-severity-threshold` can be passed as input. It's not required but with this option, only vulnerabilities of the specified level or higher will be checked.
 
 ### Usage
 
@@ -173,7 +173,7 @@ jobs:
   security:
     uses: spring-media/la-shared-github-workflows/.github/workflows/reusable-workflow__js__security.yml@v1
      secrets:
-       LA_SNYK_TOKEN:  ${{ secrets.LA_SNYK_TOKEN }}
+       LA_SNYK_TOKEN: ${{ secrets.LA_SNYK_TOKEN }}
 ```
 
 ## js\_\_run-e2e-tests
