@@ -28,7 +28,7 @@ jobs:
         with:
           args: --severity-threshold=${{ inputs.snyk-severity-threshold }}
       - name: Leaked Secrets Scan
-        uses: trufflesecurity/trufflehog@main
+        uses: trufflesecurity/trufflehog@v3.63.4
         with:
           path: ./
           base: ${{ github.event.repository.default_branch }}
