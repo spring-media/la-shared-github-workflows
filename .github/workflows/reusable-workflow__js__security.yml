@@ -31,6 +31,6 @@ jobs:
         uses: trufflesecurity/trufflehog@v3.63.4
         with:
           path: ./
-          base: ${{ github.event.repository.default_branch }}
-          head: HEAD
+          base: ${{ github.event.repository.default_branch }} # Start scanning from default main branch
+          head: ${{ github.ref_name }} # Scan the current branch
           extra_args: --debug --only-verified
