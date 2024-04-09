@@ -22,7 +22,7 @@ jobs:
       - name: Checkout branch
         uses: actions/checkout@v4
       - name: Setup node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version-file: ".node-version"
           always-auth: true
@@ -38,7 +38,7 @@ jobs:
           echo "127.0.0.1 local.la.welt.de" | sudo tee -a /etc/hosts
           echo "127.0.0.1 local.la.spring-media.de" | sudo tee -a /etc/hosts
       - name: Run e2e tests
-        uses: cypress-io/github-action@v4
+        uses: cypress-io/github-action@v5
         with:
           browser: chrome
           command: npm run e2e
