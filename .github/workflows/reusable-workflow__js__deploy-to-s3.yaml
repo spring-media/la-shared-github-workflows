@@ -91,7 +91,7 @@ jobs:
         run: aws cloudfront create-invalidation --distribution-id=${{ inputs.cloudfront_distribution_id }} --paths ${{ inputs.cloudfront_paths }}
       - name: Comment branch link on PR
         if: inputs.comment_branch_link == true && inputs.branch_deploy == true
-        uses: mshick/add-pr-comment@v1
+        uses: mshick/add-pr-comment@v2
         with:
           message: "Your branch has been deployed to: ${{ inputs.branch_deploy_base_url }}/${{ inputs.branch_name }}/"
           allow-repeats: false
