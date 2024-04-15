@@ -32,12 +32,12 @@ jobs:
           aws-region: eu-central-1
 
       - name: Install Go
-        uses: actions/setup-go@v3
+        uses: actions/setup-go@v5
         with:
           go-version: ${{ inputs.go_version }}
 
       - name: Restore go modules cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.cache/go-build
